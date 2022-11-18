@@ -1,80 +1,78 @@
 // import data from "../data";
-import {Link } from "react-router-dom";
-import  { useReducer, useEffect } from "react";
+
+import { useReducer, useEffect } from "react";
 import axios from "axios";
 import logger from 'use-reducer-logger';
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+// import LoadingBox from "../components/LoadingBox";
+// import MessageBox from "../components/MessageBox";
+import Products from "../components/Products";
 
-const reducer= (state,action) => {
-    switch(action.type){
+const reducer = (state, action) => {
+    switch (action.type) {
         case 'FETCH_REQUEST':
             return {
                 ...state,
-                loading:true,};
+                loading: true,
+            };
         case 'FETCH_SUCCESS':
-                
+
             return {
                 ...state,
-                products:action.payload,
-                loading:false,
+                products: action.payload,
+                loading: false,
             };
         case 'FETCH_FAIL':
             return {
                 ...state,
-                loading:false,
-                error:action.payload,
+                loading: false,
+                error: action.payload,
             };
         default:
             return state;
-        }
+    }
 };
 function HomeScreen() {
 
-    const [{loading,error,products},dispatch]=useReducer(logger(reducer),{
-        products:[],
-        loading:true,
-        error:'',
+    const [{ loading, error, products }, dispatch] = useReducer(logger(reducer), {
+        products: [],
+        loading: true,
+        error: '',
     });
     // const [products,setProducts]=useState([]);
-    useEffect(()=>{
-        const fetchData=async()=>{
-            dispatch({type:'FETCH_REQUEST'});
-            try{
-                const result=await axios.get('/api/products');
-                dispatch({type:'FETCH_SUCCESS',payload:result.data});
-            }catch(err){
-                dispatch({type:'FETCH_FAIL',payload:err.message});
+    useEffect(() => {
+        const fetchData = async () => {
+            dispatch({ type: 'FETCH_REQUEST' });
+            try {
+                const result = await axios.get('/api/products');
+                dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
+            } catch (err) {
+                dispatch({ type: 'FETCH_FAIL', payload: err.message });
             }
             // const result= await axios.get("/api/products");
             // setProducts(result.data);
         };
-        fetchData();    
-    },[]);
+        fetchData();
+    }, []);
 
     return (
         <div>
             <h1>Featured Products</h1>
             <div className="products">
-                {
-                    loading?<div>Loading...</div>:
-                    error?<div>{error}</div>:
-                    products.map(product=>(
-
-                // products.map((product) => (
-                    <div className="product" key={product.slug}>
-                        <Link to={`/product/${product.slug}`}>
-                            <img src={product.image} alt="product.name" />
-                        </Link>
-                        <div className="product-info">
-                            <Link to={`/product/${product.slug}`}>
-                                <p>{product.name}</p>
-                            </Link>
-                            <p>
-                                <strong>Rs.{product.price}</strong>
-                            </p>
-                            <button>Add to Cart</button>
-                        </div>
-                    </div>
-                ))}
+                {loading ? (
+                    <div>Loading...</div>
+                ) : error ? (
+                    <div>{error}</div>
+                ) : (
+                    <Row>
+                        {products.map((product) => (
+                            <Col key={product.slug} sm={6} md={4} lg={3} className="mb-3">
+                                <Products product={product}></Products>
+                            </Col>
+                        ))}
+                    </Row>
+                )}
             </div>
         </div>
     );
