@@ -1,5 +1,5 @@
 import { useContext, useEffect, useReducer } from 'react';
-import { useParams } from 'react-router-dom';
+import { Await, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -59,8 +59,17 @@ function ProductScreen() {
         fetchData();
     }, [slug]);
     const {state,dispatch:cxtDispatch}=useContext(Store);
-    const addToCartHandler = () => {
-        cxtDispatch({ type: 'CART_ADD_ITEM', payload: { ...product, qty: 1 } });
+    const {cart}=state;
+
+    const addToCartHandler = async() => {
+        const existItem = cart.cartItems.find((x) => x._id === product._id);
+        const quantity = existItem ? (existItem.quantity) + 1 : 1;
+        const {data} = await axios.get(`/api/products/${product._id}`);
+        if (data.countInStock < quantity) {
+            window.alert('Sorry. Product is out of stock');
+            return ;
+        }
+        cxtDispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
     }
     return loading ? (
         <LoadingBox />
