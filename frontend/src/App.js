@@ -12,11 +12,12 @@ import Container from "react-bootstrap/Container";
 import { LinkContainer } from "react-router-bootstrap";
 import { Nav, NavDropdown } from "react-bootstrap";
 import { Badge } from "react-bootstrap";
-import { Store } from "./Store";
-import CartScreen from "./screens/CartScreen";
-import SigninScreen from "./screens/SigninScreen";
-import ShippingAdressScreen from "./screens/ShippingAdressScreen";
-import SignupScreen from "./screens/SignupScreen";
+import { Store } from "./Store.js";
+import CartScreen from "./screens/CartScreen.js";
+import SigninScreen from "./screens/SigninScreen.js";
+import ShippingAdressScreen from "./screens/ShippingAdressScreen.js";
+import SignupScreen from "./screens/SignupScreen.js";
+import PaymentMethodScreen from "./screens/PaymentMethodScreen.js";
 function App() {
   // console.log("hello")
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -25,6 +26,7 @@ function App() {
     ctxDispatch({ type: 'USER_SIGNOUT' });
     localStorage.removeItem('userInfo');
     localStorage.removeItem('ShippingAddress');
+    localStorage.removeItem('paymentMethod');
     // navigate('/');
   }
   return (
@@ -83,6 +85,7 @@ function App() {
               <Route path='/signin' element={<SigninScreen />} />
               <Route path='/signup' element={<SignupScreen />} />
               <Route path='/shipping' element={<ShippingAdressScreen />} />
+              <Route path='/payment' element={<PaymentMethodScreen />}></Route>
               <Route path="/" element={<HomeScreen />} />
             </Routes>
           </Container>
