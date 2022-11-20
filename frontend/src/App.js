@@ -1,5 +1,5 @@
 import { BrowserRouter } from "react-router-dom";
-import {ToastContainer} from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
@@ -15,13 +15,15 @@ import { Badge } from "react-bootstrap";
 import { Store } from "./Store";
 import CartScreen from "./screens/CartScreen";
 import SigninScreen from "./screens/SigninScreen";
+import ShippingAdressScreen from "./screens/ShippingAdressScreen";
 function App() {
   // console.log("hello")
-  const {state,dispatch:ctxDispatch} = useContext(Store);
-  const{cart, userInfo}=state;
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { cart, userInfo } = state;
   const signoutHandler = () => {
-    ctxDispatch({type: 'USER_SIGNOUT'});
+    ctxDispatch({ type: 'USER_SIGNOUT' });
     localStorage.removeItem('userInfo');
+    localStorage.removeItem('ShippingAddress');
     // navigate('/');
   }
   return (
@@ -39,9 +41,9 @@ function App() {
               <Nav className="me-auto">
                 <Link to="/cart" className="nav-link">
                   Cart
-                  {cart.cartItems.length>0 && (
+                  {cart.cartItems.length > 0 && (
                     <Badge pill bg="danger">
-                      {cart.cartItems.reduce((a,c)=>a+c.quantity,0)}
+                      {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
                     </Badge>
                   )}
                 </Link>
@@ -53,7 +55,7 @@ function App() {
                     <LinkContainer to="/orderhistory">
                       <NavDropdown.Item>Order History</NavDropdown.Item>
                     </LinkContainer>
-                    <NavDropdown.Divider/>
+                    <NavDropdown.Divider />
                     <Link
                       className="dropdown-item"
                       to="#signout"
@@ -76,8 +78,9 @@ function App() {
           <Container className="mt-3">
             <Routes>
               <Route path="/product/:slug" element={<ProductScreen />} />
-              <Route path='/cart' element={<CartScreen/>}/>
-              <Route path='/signin' element={<SigninScreen/>}/>
+              <Route path='/cart' element={<CartScreen />} />
+              <Route path='/signin' element={<SigninScreen />} />
+              <Route path='/shipping' element={<ShippingAdressScreen />} />
               <Route path="/" element={<HomeScreen />} />
             </Routes>
           </Container>
