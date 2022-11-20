@@ -18,6 +18,8 @@ import SigninScreen from "./screens/SigninScreen.js";
 import ShippingAdressScreen from "./screens/ShippingAdressScreen.js";
 import SignupScreen from "./screens/SignupScreen.js";
 import PaymentMethodScreen from "./screens/PaymentMethodScreen.js";
+import PlaceOrderScreen from "./screens/PlaceOrderScreen.js";
+import OrderScreen from './screens/OrderScreen';
 function App() {
   // console.log("hello")
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -85,6 +87,8 @@ function App() {
               <Route path='/signin' element={<SigninScreen />} />
               <Route path='/signup' element={<SignupScreen />} />
               <Route path='/shipping' element={<ShippingAdressScreen />} />
+              <Route path='/placeorder' element={<PlaceOrderScreen />} />
+              <Route path="/order/:id" element={<OrderScreen />}></Route>
               <Route path='/payment' element={<PaymentMethodScreen />}></Route>
               <Route path="/" element={<HomeScreen />} />
             </Routes>
